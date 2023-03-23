@@ -18,7 +18,7 @@ interface Props {
   Addr: string;
 }
 
-function App() {
+const App = () => {
   const [values, setValues] = React.useState<Props>({
     _id: "",
     Name: "",
