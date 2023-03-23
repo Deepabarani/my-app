@@ -9,6 +9,7 @@ import { Field, Formik } from "formik";
 import { LoadingButton } from "@mui/lab";
 import { Box, TextField, Typography } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
+import { ValidationSchema } from "./validation-schema";
 
 interface Props {
   _id: string;
@@ -50,25 +51,7 @@ function App() {
     }
   }, [isEdit]);
 
-
-  // const hanldeChange = (event: any) => {
-  //   const { name, value } = event.target;
-  //   setValues((preValue) => ({
-  //     ...preValue,
-  //     [name]: value,
-  //   }));
-  // };
-
   const hanldeSubmit = (data: any, prop: any, resetForm: any) => {
-    // let data = {
-    //   Name: values.Name,
-    //   Age: values.Age,
-    // };
-    // let Editdata = {
-    //   _id: values._id,
-    //   Name: values.Name,
-    //   Age: values.Age,
-    // };
     if (isEdit && prop === "edit") {
       updateData("/info/update", data).then((res: any) => {
         console.log(res);
@@ -112,8 +95,11 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">FORM</header>
-      <div>
+       <Box sx={{ padding: "16px 25px" }}>
+      <Typography variant="h6">
+       FORM
+      </Typography>
+      <Box sx={{ width: "50%", marginTop: "26px", "& .MuiTextField-root": { mb: 2 } }}>
         <Formik
           enableReinitialize={true}
           initialValues={{
@@ -122,7 +108,7 @@ function App() {
             Age: values.Age || "",
             Addr: values.Addr || "",
           }}
-          // validationSchema={ValidationSchema(t, videoSourceData)}
+          validationSchema={ValidationSchema()}
           onSubmit={(data, {resetForm}) => {
             if (data._id) {
               const updateRequest = {
@@ -147,45 +133,64 @@ function App() {
             <form noValidate onSubmit={formik.handleSubmit}>
               {/* <label>Name</label> */}
               <TextField
-                type="text"
                 name="Name"
                 onChange={formik.handleChange}
+                placeholder="Name"
                 // defaultValue={values.Name}
                 value={formik.values.Name}
+                variant="outlined"
+                size="medium"
+                fullWidth
+                required
+                error={formik.touched.Name && Boolean(formik.errors.Name)}
+                helperText={formik.touched.Name && formik.errors.Name}
               />
-              {/* <label>Age</label> */}
               <TextField
-                type="number"
                 name="Age"
+                placeholder="Age"
                 onChange={formik.handleChange}
                 // defaultValue={values.Age}
+                variant="outlined"
+                size="medium"
+                fullWidth
+                required
                 value={formik.values.Age}
+                error={formik.touched.Age && Boolean(formik.errors.Age)}
+                helperText={formik.touched.Age && formik.errors.Age}
               />
-              {/* <label>Addr</label> */}
               <TextField
-                type="text"
                 name="Addr"
+                placeholder="Address"
                 onChange={formik.handleChange}
                 // defaultValue={values.Addr}
+                variant="outlined"
+                size="medium"
+                fullWidth
+                required
                 value={formik.values.Addr}
+                error={formik.touched.Addr && Boolean(formik.errors.Addr)}
+                helperText={formik.touched.Addr && formik.errors.Addr}
               />
               <button type="submit">OK</button>
             </form>
           )}
         </Formik>
-        <div>
-          <ul>
+        </Box>
+        <Box sx={{width: "30%", backgroundColor: "#E0E0E0", }}>
+          <ul style={{}}>
             {finalData?.length > 0 &&
               finalData?.map((x: any) => (
-                <li key={x._id} style={{ marginRight: "100px" }}>
+                <li key={x._id} style={{ marginRight: "50px" , paddingRight: "10px"}}>
                   {x.Name + "      " + x.Age}
+                  <Box>
                   <button onClick={() => handleEdit(x)}>Edit</button>
                   <button onClick={() => handleDelete(x._id)}>x</button>
+                  </Box>
                 </li>
               ))}{" "}
           </ul>
-        </div>
-      </div>
+        </Box>
+      </Box>
     </div>
   );
 }
